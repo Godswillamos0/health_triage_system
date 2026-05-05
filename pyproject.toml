@@ -1,0 +1,14 @@
+[project]
+name = "triage-system"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi[standard]>=0.136.1",
+    "jinja2>=3.1.6",
+    "joblib>=1.5.3",
+    "pandas>=3.0.2",
+    "scikit-learn>=1.8.0",
+    "xgboost>=3.2.0",
+]

@@ -1,0 +1,6 @@
+id,name,latitude,longitude,services,beds_available,specialty
+1,FUTA Health Centre,7.3000,5.1333,General Practice|Emergency,20,General
+2,State Specialist Hospital Akure,7.2500,5.1950,Emergency|Surgery|Maternity,50,Emergency
+3,Mother and Child Hospital Akure,7.2400,5.2000,Maternity|Pediatrics,30,Pediatrics
+4,Don Bosco Hospital,7.2600,5.2100,Surgery|General Practice,15,Surgery
+5,Sckyé Hospital,7.2700,5.2050,Orthopedics|Emergency,25,Orthopedics

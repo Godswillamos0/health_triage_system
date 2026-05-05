@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Decision Support System | Smart Triage</title>
+    <meta name="description" content="AI-powered medical triage and hospital recommendation system.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-glow: rgba(14, 165, 233, 0.5);
+            --secondary: #8b5cf6;
+            --dark-bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border-glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #38bdf8, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px var(--primary-glow);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-glass);
+            color: var(--text-main);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover::after {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Section */
+        #results-section {
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.5s ease;
+            display: none;
+        }
+
+        #results-section.show {
+            opacity: 1;
+            transform: translateX(0);
+            display: block;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .triage-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 999px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            animation: pulse 2s infinite;
+        }
+
+        .level-Resuscitation { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; }
+        .level-Emergency { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid #f59e0b; }
+        .level-Urgent { background: rgba(14, 165, 233, 0.2); color: #7dd3fc; border: 1px solid #0ea5e9; }
+        .level-Routine { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid #10b981; }
+
+        .reasoning-box {
+            background: rgba(0,0,0,0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .hospital-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .hospital-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .hospital-card:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: var(--primary-glow);
+        }
+
+        .h-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: #e2e8f0;
+        }
+
+        .h-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .h-score {
+            text-align: right;
+        }
+
+        .h-score .dist {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .h-score .beds {
+            font-size: 0.8rem;
+            color: var(--success);
+            margin-top: 0.2rem;
+        }
+
+        .loader {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(14, 165, 233, 0.2);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(var(--rgb), 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(var(--rgb), 0); }
+            100% { box-shadow: 0 0 0 0 rgba(var(--rgb), 0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Smart Triage & Routing</h1>
+        <p>AI-Powered Healthcare Decision Support System</p>
+    </header>
+
+    <div class="layout">
+        <!-- Input Form -->
+        <div class="glass-card">
+            <h2>Patient Data Entry</h2>
+            <form id="triage-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="age">Age (years)</label>
+                        <input type="number" id="age" name="age" required min="0" max="120" value="35">
+                    </div>
+                    <div class="form-group">
+                        <label for="heart_rate">Heart Rate (bpm)</label>
+                        <input type="number" id="heart_rate" name="heart_rate" required value="85">
+                    </div>
+                    <div class="form-group">
+                        <label for="systolic_blood_pressure">Systolic BP</label>
+                        <input type="number" id="systolic_blood_pressure" name="systolic_blood_pressure" required value="120">
+                    </div>
+                    <div class="form-group">
+                        <label for="oxygen_saturation">SpO2 (%)</label>
+                        <input type="number" step="0.1" id="oxygen_saturation" name="oxygen_saturation" required value="98.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="body_temperature">Temperature (°C)</label>
+                        <input type="number" step="0.1" id="body_temperature" name="body_temperature" required value="37.0">
+                    </div>
+                    <div class="form-group">
+                        <label for="pain_level">Pain Level (0-10)</label>
+                        <input type="number" id="pain_level" name="pain_level" required min="0" max="10" value="3">
+                    </div>
+                    <div class="form-group">
+                        <label for="chronic_disease_count">Chronic Diseases</label>
+                        <input type="number" id="chronic_disease_count" name="chronic_disease_count" required value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="previous_er_visits">Prev ER Visits</label>
+                        <input type="number" id="previous_er_visits" name="previous_er_visits" required value="0">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="symptoms">Chief Complaint & Symptoms</label>
+                        <textarea id="symptoms" name="symptoms" required placeholder="Describe patient symptoms here... e.g. severe headache and fever for 2 days"></textarea>
+                    </div>
+                </div>
+                <button type="submit" id="submit-btn">Run AI Triage Analysis</button>
+            </form>
+        </div>
+
+        <!-- Results Display -->
+        <div class="glass-card" id="results-card">
+            <h2>Analysis Results</h2>
+            <div class="loader" id="loader"></div>
+            
+            <div id="results-section">
+                <div class="result-header">
+                    <p style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Recommended Triage Level</p>
+                    <div id="triage-badge" class="triage-badge level-Routine">Routine</div>
+                </div>
+
+                <div class="reasoning-box" id="reasoning-text">
+                    Reasoning will appear here.
+                </div>
+
+                <h3 style="margin-bottom: 1rem; font-size: 1.1rem; color: var(--text-muted);">Recommended Facilities</h3>
+                <div class="hospital-list" id="hospital-list">
+                    <!-- Hospitals injected here -->
+                </div>
+            </div>
+            
+            <div id="empty-state" style="text-align: center; color: var(--text-muted); padding: 3rem 0;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <p>Submit patient data to view AI recommendations.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('triage-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const btn = document.getElementById('submit-btn');
+    const loader = document.getElementById('loader');
+    const resultsSection = document.getElementById('results-section');
+    const emptyState = document.getElementById('empty-state');
+    
+    btn.disabled = true;
+    btn.textContent = 'Analyzing...';
+    emptyState.style.display = 'none';
+    resultsSection.classList.remove('show');
+    loader.style.display = 'block';
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Parse numeric fields
+    const numericFields = ['age', 'heart_rate', 'systolic_blood_pressure', 'oxygen_saturation', 'body_temperature', 'pain_level', 'chronic_disease_count', 'previous_er_visits'];
+    numericFields.forEach(field => {
+        data[field] = parseFloat(data[field]);
+    });
+    
+    // Hardcode coords for demo (Akure, Nigeria)
+    data.latitude = 7.2507;
+    data.longitude = 5.2069;
+
+    try {
+        const res = await fetch('/api/triage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await res.json();
+        
+        // Update UI
+        const badge = document.getElementById('triage-badge');
+        badge.textContent = result.triage_level;
+        badge.className = `triage-badge level-${result.triage_level}`;
+        
+        // Set RGB for pulse animation
+        if(result.triage_level === 'Resuscitation') badge.style.setProperty('--rgb', '239, 68, 68');
+        else if(result.triage_level === 'Emergency') badge.style.setProperty('--rgb', '245, 158, 11');
+        else if(result.triage_level === 'Urgent') badge.style.setProperty('--rgb', '14, 165, 233');
+        else badge.style.setProperty('--rgb', '16, 185, 129');
+
+        document.getElementById('reasoning-text').textContent = result.reasoning;
+        
+        const list = document.getElementById('hospital-list');
+        list.innerHTML = '';
+        
+        if (result.recommended_facilities && result.recommended_facilities.length > 0) {
+            result.recommended_facilities.forEach(h => {
+                list.innerHTML += `
+                    <div class="hospital-card">
+                        <div class="h-info">
+                            <h3>${h.name}</h3>
+                            <p>${h.services} • ${h.specialty} Specialty</p>
+                        </div>
+                        <div class="h-score">
+                            <div class="dist">${h.distance_km.toFixed(1)} km</div>
+                            <div class="beds">${h.beds_available} beds avail.</div>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            list.innerHTML = '<p style="color: var(--text-muted)">No facilities found.</p>';
+        }
+
+        setTimeout(() => {
+            loader.style.display = 'none';
+            resultsSection.classList.add('show');
+            btn.disabled = false;
+            btn.textContent = 'Run AI Triage Analysis';
+        }, 800);
+
+    } catch (err) {
+        console.error(err);
+        alert('An error occurred during analysis.');
+        loader.style.display = 'none';
+        emptyState.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Run AI Triage Analysis';
+    }
+});
+</script>
+</body>
+</html>
