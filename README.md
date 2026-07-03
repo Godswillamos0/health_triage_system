@@ -1,4 +1,4 @@
-# Intelligent Decision Support System (IDSS) for Symptom Triage & Healthcare Facility Recommendation
+# Decision Support System (DSS) for Symptom Triage & Healthcare Facility Recommendation
 
 <div align="center">
   <img src="https://img.shields.io/badge/Python-3.11+-blue.svg" alt="Python Version">
