@@ -20,5 +20,3 @@ This report provides a comparative analysis of different machine learning models
 2. **Logistic Regression Surprise**: Logistic Regression performed incredibly well (0.9370 F1-Score), practically matching the complex tree-based models while taking significantly less time to train (4.2 seconds). This indicates that the relationship between the features and the triage levels is highly linear or that the dataset might not have complex non-linear boundaries.
 3. **Training Time Trade-offs**: K-Nearest Neighbors was the fastest to train (1.10s) but had the lowest overall performance (0.9200 F1-Score). 
 
-> [!TIP]
-> Given these results, **Logistic Regression** might actually be a fantastic alternative to XGBoost for this specific dataset if you value simplicity, absolute mathematical transparency, and faster training times, with almost no sacrifice in accuracy.
