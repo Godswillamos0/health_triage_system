@@ -1,4 +1,4 @@
-# Decision Support System (DSS) for Symptom Triage & Healthcare Facility Recommendation
+# Decision Support System (IDSS) for Symptom Triage & Healthcare Facility Recommendation
 
 <div align="center">
   <img src="https://img.shields.io/badge/Python-3.11+-blue.svg" alt="Python Version">
@@ -12,7 +12,7 @@
 
 This project was proposed by **Adedeji Adedunmola ‘Deniolabomi** from the Department of Information Systems, Federal University of Technology, Akure (FUTA), and supervised by **Dr. A.I Makinde**.
 
-The system is an end-to-end **Intelligent Decision Support System (IDSS)** designed to bridge the gap in emergency room operations and healthcare facility allocation. Traditional triage methods rely heavily on human judgment, achieving roughly 60% accuracy on average, which leads to prolonged wait times and hospital overcrowding. Furthermore, in developing regions like Nigeria, the uneven distribution of healthcare facilities makes it difficult for patients to find the right care quickly.
+The system is an end-to-end **Decision Support System (IDSS)** designed to bridge the gap in emergency room operations and healthcare facility allocation. Traditional triage methods rely heavily on human judgment, achieving roughly 60% accuracy on average, which leads to prolonged wait times and hospital overcrowding. Furthermore, in developing regions like Nigeria, the uneven distribution of healthcare facilities makes it difficult for patients to find the right care quickly.
 
 This solution integrates Natural Language Processing (NLP), Machine Learning (XGBoost), and Multi-Criteria Decision Making (MCDM) to provide accurate triage predictions and instantly route patients to the most appropriate, nearest hospital with available bed capacity.
 
@@ -30,7 +30,7 @@ This solution integrates Natural Language Processing (NLP), Machine Learning (XG
    Uses the **Haversine formula** to calculate the geographic distance between the patient's coordinates and nearby hospitals. An **MCDM (Multi-Criteria Decision Making)** scoring function then ranks facilities based on proximity, bed availability, and matching medical specialties.
 
 4. **Dynamic User Interface**  
-   A beautiful, responsive web interface built with modern design principles (Glassmorphism, glowing micro-animations, dark mode aesthetics) allowing patients or medical staff to easily input data and view actionable AI recommendations.
+   A beautiful, responsive web interface built with modern design principles (Glassmorphism, glowing micro-animations, dark mode aesthetics) allowing patients or medical staff to easily input data and view actionable recommendations.
 
 5. **Knowledge Base Layer**  
    Backed by synthetic tabular datasets (`synthetic_medical_triage.csv`) and localized hospital coordinates (`hospitals.csv`), acting as the primary knowledge store for the system.
